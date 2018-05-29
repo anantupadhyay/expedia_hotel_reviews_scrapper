@@ -5,7 +5,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 from bs4 import BeautifulSoup
 import time
-
+import csv
 review = []
 date = []
 rating = []
@@ -16,11 +16,11 @@ def get_response_from_server(url):
 		browser = webdriver.Chrome()
 		browser.get(url)
 		browser.find_element_by_xpath('.//*[@id="link-to-reviews"]').click()
-		wait = WebDriverWait(browser, 10)
-		
+		wait = WebDriverWait(browser, 13)
+
 		while(True):
 			
-			time.sleep(7)
+			time.sleep(15)
 			cnt += 1
 			# store it to string variable
 			page = browser.page_source
@@ -53,11 +53,15 @@ def scrap_result(soup):
 	for tmp in rt:
 		rating.append(tmp.get_text())
 
-	for x in range(len(review)):
-		print date[x], rating[x], review[x]
-
 url = "https://www.expedia.co.in/Ooty-Hotels-Kurumba-Village-Resort.h6129303.Hotel-Information?chkin=29%2F05%2F2018&chkout=30%2F05%2F2018&rm1=a2&hwrqCacheKey=f7945c2a-d72b-462c-a6af-254594b327a2HWRQ1527593270029&cancellable=false&regionId=6234125&vip=false&c=a3c473ef-ac7b-400f-a1ab-82c2b0d7b8d0&&exp_dp=13409.93&exp_ts=1527593245227&exp_curr=INR&swpToggleOn=false&exp_pg=HSR"
 get_response_from_server(url)
 
 print ("Total reviews are")
 print (len(review))
+
+#csv.register_dialect('myDialect', delimiter=',', quoting=csv.QUOTE_NONE)
+myFile = open('example2.csv', 'w')
+for x in range(len(review)):
+	with myFile:
+		writer = csv.writer(myFile)
+		writer.writerows(review.encode("utf-8"))
