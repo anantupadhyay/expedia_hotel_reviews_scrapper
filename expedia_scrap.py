@@ -5,7 +5,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 from bs4 import BeautifulSoup
 import time
-import csv
+
 review = []
 date = []
 rating = []
@@ -25,7 +25,7 @@ def get_response_from_server(url):
 			# store it to string variable
 			page = browser.page_source
 			soup=BeautifulSoup(page, 'html.parser')
-			scrap_result(soup)
+			scrap_logic(soup)
 
 			try:
 				element = wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'pagination-next')))
@@ -39,7 +39,7 @@ def get_response_from_server(url):
 		print (e)
 		return
 
-def scrap_result(soup):
+def scrap_logic(soup):
 	#soup = BeautifulSoup(open("expedia.html"), "html.parser")
 	rev = soup.find_all('span', {'class':'translate-text'})
 	for tmp in rev:
@@ -59,9 +59,9 @@ get_response_from_server(url)
 print ("Total reviews are")
 print (len(review))
 
-#csv.register_dialect('myDialect', delimiter=',', quoting=csv.QUOTE_NONE)
-myFile = open('example2.csv', 'w')
-for x in range(len(review)):
-	with myFile:
-		writer = csv.writer(myFile)
-		writer.writerows(review.encode("utf-8"))
+with open("output.txt", "w") as thefile:
+	for x in range(len(review)):
+		thefile.write("%s\n" % date[x])
+		thefile.write("%s\n" % rating[x])
+		thefile.write("%s\n\n" % review[x].encode("utf-8"))
+thefile.close()
