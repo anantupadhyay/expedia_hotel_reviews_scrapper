@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from selenium import webdriver 
 from selenium.webdriver.common.by import By 
 from selenium.webdriver.support.ui import WebDriverWait 
@@ -5,6 +6,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 from bs4 import BeautifulSoup
 import time
+import codecs
 
 review = []
 date = []
@@ -68,9 +70,9 @@ get_response_from_server(url)
 print ("Total reviews are")
 print (len(review), len(date))
 
-with open("output.txt", "w") as thefile:
+with codecs.open("output.txt", "w", encoding="utf-8") as thefile:
 	for x in range(len(review)):
-		thefile.write("%s\n" % date[x])
-		thefile.write("%s\n" % rating[x])
-		thefile.write("%s\n\n" % review[x].encode("utf-8"))
+		thefile.write("%s\n" % date[x].decode("utf-8"))
+		thefile.write("%s\n" % rating[x].decode("utf-8"))
+		thefile.write("%s\n\n" % review[x].decode("utf-8"))
 thefile.close()
